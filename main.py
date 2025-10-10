@@ -1,6 +1,6 @@
 import flet as ft
 from pages.index import Index
-
+from pages.documentation import Docs
 
 def main(page: ft.Page):
     page.title = "Praeludium"
@@ -16,6 +16,10 @@ def main(page: ft.Page):
             page.views.append(
                 Index(page)
             )
+        elif page.route == '/docs':
+            page.views.append(
+                Docs(page)
+            )
         
         page.update()
         
@@ -29,4 +33,4 @@ def main(page: ft.Page):
     page.go(page.route)
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(target=main, assets_dir="assets")

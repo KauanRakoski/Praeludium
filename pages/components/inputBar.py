@@ -1,6 +1,10 @@
 import flet as ft
 
 class InputBar(ft.Row):
+    """
+    Input bar for handling text generation. Needs to receive callbacks for 
+    uploading file and submiting for conversion
+    """
     def __init__(self, on_submit_click=None, on_attach_click=None):
         super().__init__()
         
