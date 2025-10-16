@@ -12,7 +12,7 @@ class Docs (ft.View):
         self.route = "/docs"
         self.page = page
         
-        inputBar = InputBar()    
+        inputBar = InputBar(page=self.page)    
         welcomeTitle = Text("Bem Vindo à documentação!")
         welcomeTitle.setBold(True)
         hint = Text("Aqui você encontra as correspondências entre o texto e as ações musicais a serem tomadas", size="small")

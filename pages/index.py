@@ -3,6 +3,7 @@ from .components.inputBar import InputBar
 from .components.text import Text
 from .components.verticalLayout import VerticalLayout
 from .components.logo import Logo
+from filehandler.fileHandler import FileHandler
 
 MARGIN_FROM_TOP = 200
 
@@ -12,8 +13,10 @@ class Index (ft.View):
         
         self.route = "/"
         self.page = page
-
-        inputBar = InputBar()    
+        
+        fileHandler = FileHandler()
+        
+        inputBar = InputBar(page=self.page, on_attach_click=fileHandler.loadTxtFile)    
         welcomeTitle = Text("Bem Vindo ao Praeludium!")
         welcomeTitle.setBold(True)
         

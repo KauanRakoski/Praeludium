@@ -14,7 +14,7 @@ class RuleTable(ft.DataTable):
                 ft.DataRow(
                     cells=[
                         ft.DataCell(ft.Text(text)),
-                        ft.DataCell(ft.Text(action)),
+                        ft.DataCell(ft.Text(action['description'])),
                     ]
                 )
             )
