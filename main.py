@@ -1,6 +1,7 @@
 import flet as ft
 from pages.index import Index
 from pages.documentation import Docs
+from pages.answers import Answers
 
 def main(page: ft.Page):
     page.title = "Praeludium"
@@ -19,6 +20,11 @@ def main(page: ft.Page):
         elif page.route == '/docs':
             page.views.append(
                 Docs(page)
+            )
+        
+        else:
+            page.views.append(
+                Answers(page)
             )
         
         page.update()

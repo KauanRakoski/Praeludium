@@ -1,28 +1,33 @@
 import flet as ft
+from filehandler.fileHandler import FileHandler
+from soundmanager.soundManager import SoundManager
 from .components.inputBar import InputBar
 from .components.text import Text
 from .components.verticalLayout import VerticalLayout
 from .components.logo import Logo
-from filehandler.fileHandler import FileHandler
+from .components.playSave import playSave
+from soundmanager.soundManager import SoundManager
 from conversor.conversor import Conversor
-from conversor.conversor import default_rules
+from conversor.defaultRules import default_rules
 
-MARGIN_FROM_TOP = 200
-
-class Index (ft.View):
-    def __init__(self, page: ft.Page):
+class Answers(ft.View):
+    def __init__(self, page):
         super().__init__()
         
         self.route = "/"
         self.page = page
         
+        self.soundManager = SoundManager()
+        
         self.fileHandler = FileHandler()
+        
+        soundControls = playSave(on_play_click=self.soundManager.play_music, on_save_click=self.fileHandler.salvarArquivoMidi, page=page)
         
         rules = default_rules()
         self.conversor = Conversor(rules)
         
         inputBar = InputBar(page=self.page, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
-        welcomeTitle = Text("Bem Vindo ao Praeludium!")
+        welcomeTitle = Text("Suas respostas!")
         welcomeTitle.setBold(True)
         
         hint = ft.Text(
@@ -47,6 +52,7 @@ class Index (ft.View):
         textLayout.add_control(logo)
         textLayout.add_control(welcomeTitle)
         textLayout.add_control(hint)
+        textLayout.add_control(soundControls)
         
         # It is necessary to use a container for margin adjustment, column does not have it
         HelloContainer = ft.Container(
@@ -58,7 +64,7 @@ class Index (ft.View):
             HelloContainer,
             inputBar
         ]
-    
+        
     def submit_event(self, texto):
         music_events = self.conversor.converter_texto(texto)
         self.fileHandler.salvarArquivoMidi(music_events)

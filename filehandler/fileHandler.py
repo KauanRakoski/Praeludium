@@ -23,7 +23,7 @@ class FileHandler():
         except Exception as e:
             return -1
         
-    def setupMidiFile(self, midi_messages):
+    def _setupMidiFile(self, midi_messages):
         arquivo_mid = mido.MidiFile(type=1)
         trilha = mido.MidiTrack()
         arquivo_mid.tracks.append(trilha)
@@ -34,6 +34,6 @@ class FileHandler():
         return arquivo_mid
     
     def salvarArquivoMidi(self, midi_messages):
-        arquivo = self.setupMidiFile(midi_messages)
+        arquivo = self._setupMidiFile(midi_messages)
         
-        arquivo.save("teste_output.mid")
+        arquivo.save("output.mid")

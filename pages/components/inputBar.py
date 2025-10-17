@@ -11,6 +11,7 @@ class InputBar(ft.Row):
         
         self.page = page
         self.on_attach_click = on_attach_click
+        self.on_submit_click = on_submit_click
         
         self.file_picker = ft.FilePicker(on_result=self._on_file_dialog_result)
         self.page.overlay.append(self.file_picker)
@@ -22,7 +23,7 @@ class InputBar(ft.Row):
             max_lines=4,
             shift_enter=True,
             border_color=ft.Colors.WHITE24,
-            on_submit=self._open_file_picker
+            on_submit=self._submit_event_handle
         )
         
         self.controls = [
@@ -35,7 +36,7 @@ class InputBar(ft.Row):
             ft.IconButton(
                 icon=ft.Icons.PLAY_ARROW_ROUNDED,
                 tooltip="Gerar música",
-                on_click=on_submit_click
+                on_click=self._submit_event_handle
             ),
         ]
         
@@ -56,3 +57,8 @@ class InputBar(ft.Row):
     def _set_text(self, text):
         self.input_field.value = text
         self.page.update()
+        
+    def _submit_event_handle(self, e):
+        texto = self.input_field.value
+        self.on_submit_click(texto)
+        self.page.go("/answers")
