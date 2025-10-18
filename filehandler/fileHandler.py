@@ -30,7 +30,7 @@ class FileHandler():
         
         for msg in midi_messages:
             trilha.append(msg)
-            
+                 
         return arquivo_mid
     
     def salvarArquivoMidi(self, midi_messages):

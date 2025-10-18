@@ -2,6 +2,7 @@ import flet as ft
 from pages.index import Index
 from pages.documentation import Docs
 from pages.answers import Answers
+from stateManager import StateManager
 
 def main(page: ft.Page):
     page.title = "Praeludium"
@@ -10,21 +11,23 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.SPACE_BETWEEN
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     
+    state = StateManager()
+    
     def route_change(route):
         page.views.clear()
         
         if page.route == "/":
             page.views.append(
-                Index(page)
+                Index(page, state)
             )
         elif page.route == '/docs':
             page.views.append(
-                Docs(page)
+                Docs(page, state)
             )
         
         else:
             page.views.append(
-                Answers(page)
+                Answers(page, state)
             )
         
         page.update()

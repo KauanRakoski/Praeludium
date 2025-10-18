@@ -10,7 +10,7 @@ from conversor.conversor import Conversor
 from conversor.defaultRules import default_rules
 
 class Docs (ft.View):
-    def __init__(self, page: ft.Page):
+    def __init__(self, page: ft.Page, state):
         super().__init__()
         self.route = "/docs"
         self.page = page

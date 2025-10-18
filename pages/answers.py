@@ -9,13 +9,19 @@ from .components.playSave import playSave
 from soundmanager.soundManager import SoundManager
 from conversor.conversor import Conversor
 from conversor.defaultRules import default_rules
+from stateManager import StateManager
 
 class Answers(ft.View):
-    def __init__(self, page):
+    def __init__(self, page, state: StateManager):
         super().__init__()
         
         self.route = "/"
         self.page = page
+        
+        self.state = state
+        
+        self.generated_sound = state.getMidiMessages()
+        self.text_inputed = state.getText()
         
         self.soundManager = SoundManager()
         
@@ -29,6 +35,8 @@ class Answers(ft.View):
         inputBar = InputBar(page=self.page, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
         welcomeTitle = Text("Suas respostas!")
         welcomeTitle.setBold(True)
+        
+        generated = Text(f"Seu texto: {self.text_inputed}", "small")
         
         hint = ft.Text(
             spans=[
@@ -51,6 +59,7 @@ class Answers(ft.View):
 
         textLayout.add_control(logo)
         textLayout.add_control(welcomeTitle)
+        textLayout.add_control(generated)
         textLayout.add_control(hint)
         textLayout.add_control(soundControls)
         
@@ -68,3 +77,6 @@ class Answers(ft.View):
     def submit_event(self, texto):
         music_events = self.conversor.converter_texto(texto)
         self.fileHandler.salvarArquivoMidi(music_events)
+        
+        self.state.setText(texto)
+        self.state.setMidiMessages(music_events)

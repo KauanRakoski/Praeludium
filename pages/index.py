@@ -6,15 +6,18 @@ from .components.logo import Logo
 from filehandler.fileHandler import FileHandler
 from conversor.conversor import Conversor
 from conversor.conversor import default_rules
+from stateManager import StateManager
 
 MARGIN_FROM_TOP = 200
 
 class Index (ft.View):
-    def __init__(self, page: ft.Page):
+    def __init__(self, page: ft.Page, state: StateManager):
         super().__init__()
         
         self.route = "/"
         self.page = page
+        
+        self.state = state
         
         self.fileHandler = FileHandler()
         
@@ -62,3 +65,6 @@ class Index (ft.View):
     def submit_event(self, texto):
         music_events = self.conversor.converter_texto(texto)
         self.fileHandler.salvarArquivoMidi(music_events)
+        
+        self.state.setText(texto)
+        self.state.setMidiMessages(music_events)
