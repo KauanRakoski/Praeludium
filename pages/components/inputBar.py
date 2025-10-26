@@ -1,4 +1,5 @@
 import flet as ft
+from stateManager import StateManager
 
 class InputBar(ft.Row):
     """
@@ -6,7 +7,7 @@ class InputBar(ft.Row):
     Needs to receive callbacks for 
     uploading file and submiting for conversion
     """
-    def __init__(self, page, on_submit_click=None, on_attach_click=None):
+    def __init__(self, page, state : StateManager, on_submit_click=None, on_attach_click=None):
         super().__init__()
         
         self.page = page
@@ -15,6 +16,8 @@ class InputBar(ft.Row):
         
         self.file_picker = ft.FilePicker(on_result=self._on_file_dialog_result)
         self.page.overlay.append(self.file_picker)
+        
+        self.state = state
         
         self.input_field = ft.TextField(
             hint_text="Escreva as regras aqui...",
@@ -51,6 +54,7 @@ class InputBar(ft.Row):
             file_path = str(e.files[0].path)
             content = self.on_attach_click(file_path)
             self._set_text(content)
+            self.state.setOpenedTextFilePath(file_path)
         else:
             print("Seleção de arquivo cancelada.")
             

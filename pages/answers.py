@@ -27,12 +27,17 @@ class Answers(ft.View):
         
         self.fileHandler = FileHandler()
         
-        soundControls = playSave(on_play_click=self.soundManager.play_music, on_save_click=self.fileHandler.salvarArquivoMidi, page=page)
+        soundControls = playSave(on_play_click=self.soundManager.play_music, 
+                                 on_save_click=self.fileHandler.salvarArquivoMidi,
+                                 on_save_text_click=self.fileHandler.saveTextFile, 
+                                 page=page, 
+                                 state = self.state,
+                                 )
         
         rules = default_rules()
         self.conversor = Conversor(rules)
         
-        inputBar = InputBar(page=self.page, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
+        inputBar = InputBar(page=self.page, state = self.state, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
         welcomeTitle = Text("Suas respostas!")
         welcomeTitle.setBold(True)
         

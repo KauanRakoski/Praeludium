@@ -24,7 +24,7 @@ class Index (ft.View):
         rules = default_rules()
         self.conversor = Conversor(rules)
         
-        inputBar = InputBar(page=self.page, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
+        inputBar = InputBar(page=self.page,state = self.state, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
         welcomeTitle = Text("Bem Vindo ao Praeludium!")
         welcomeTitle.setBold(True)
         

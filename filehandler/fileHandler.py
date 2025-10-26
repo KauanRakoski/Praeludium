@@ -13,7 +13,7 @@ class FileHandler():
         except Exception as e:
             return -1
         
-    def saveTextFile(content, path):
+    def saveTextFile(self, content, path):
         """
         Saves content to .txt file of especified path. Error = -1
         """

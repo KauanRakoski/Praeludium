@@ -1,7 +1,8 @@
 import flet as ft
+from stateManager import StateManager
 
 class playSave(ft.Container):
-    def __init__(self, page, on_play_click, on_save_click):
+    def __init__(self, page, state: StateManager, on_play_click, on_save_click, on_save_text_click):
         super().__init__()
         
         self.page = page
@@ -9,9 +10,12 @@ class playSave(ft.Container):
         self.page.overlay.append(self.save_dialog)
         
         self.on_save_click_external = on_save_click
+        self.on_save_text_click = on_save_text_click
+
+        self.state = state
         
         self.play_button = ft.ElevatedButton(
-            text="Tocar",
+            text="Tocar música",
             icon=ft.Icons.PLAY_ARROW_ROUNDED,
             on_click=on_play_click,
             bgcolor=ft.Colors.WHITE12,
@@ -19,16 +23,25 @@ class playSave(ft.Container):
         )
         
         self.save_button = ft.ElevatedButton(
-            text="Salvar",
+            text="Salvar áudio",
             icon=ft.Icons.DOWNLOAD_ROUNDED,
             on_click=self._open_save_dialog,
+            bgcolor=ft.Colors.WHITE12,
+            color=ft.Colors.WHITE
+        )
+
+        self.save_text_button = ft.ElevatedButton(
+            text="Salvar texto",
+            icon=ft.Icons.DOWNLOAD_ROUNDED,
+            on_click=self._handle_save_text,
             bgcolor=ft.Colors.WHITE12,
             color=ft.Colors.WHITE
         )
         
         controls = [
             self.play_button,
-            self.save_button
+            self.save_button,
+            self.save_text_button
         ]
         
         row = ft.Row(controls, alignment=ft.MainAxisAlignment.CENTER)
@@ -49,4 +62,9 @@ class playSave(ft.Container):
         if e.path:
             if self.on_save_click_external:
                 self.on_save_click_external(e.path)
+    
+    def _handle_save_text(self, e):
+        path = self.state.getOpenedTextFilePath()
+        content = self.state.getText()
+        self.on_save_text_click(content, path)
         
