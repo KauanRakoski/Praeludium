@@ -19,8 +19,10 @@ class Docs (ft.View):
         
         rules = default_rules()
         self.conversor = Conversor(rules)
+
+        self.state = state
         
-        inputBar = InputBar(page=self.page, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
+        inputBar = InputBar(page=self.page, state = self.state, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
           
         welcomeTitle = Text("Bem Vindo à documentação!")
         welcomeTitle.setBold(True)
@@ -28,6 +30,12 @@ class Docs (ft.View):
         logo = Logo()
         
         docsTable = RuleTable(default_rules())
+
+        backButton = ft.ElevatedButton(
+            "Voltar",
+            icon=ft.Icons.ARROW_BACK,
+            on_click=lambda e: self.page.go("/")  
+        )
         
         self.vertical_alignment = ft.MainAxisAlignment.SPACE_BETWEEN
         self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
@@ -39,6 +47,7 @@ class Docs (ft.View):
         textLayout.add_control(logo)
         textLayout.add_control(welcomeTitle)
         textLayout.add_control(hint)
+        textLayout.add_control(backButton)
         textLayout.add_control(docsTable)
         
 
