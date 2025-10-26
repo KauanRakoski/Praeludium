@@ -11,13 +11,11 @@ class InputBar(ft.Row):
         super().__init__()
         
         self.page = page
+        self.state = state
         self.on_attach_click = on_attach_click
         self.on_submit_click = on_submit_click
         
-        self.file_picker = ft.FilePicker(on_result=self._on_file_dialog_result)
-        self.page.overlay.append(self.file_picker)
-        
-        self.state = state
+        self.file_picker = ft.FilePicker(on_result=self._on_file_dialog_result)        
         
         self.input_field = ft.TextField(
             hint_text="Escreva as regras aqui...",
@@ -50,19 +48,22 @@ class InputBar(ft.Row):
         )
         
     def _on_file_dialog_result(self, e):
-        if e.files: # Se o usuário selecionou um arquivo
+        """
+        Warns parent class of file selection request
+        """
+        if e.files: 
             file_path = str(e.files[0].path)
-            content = self.on_attach_click(file_path)
-            self._set_text(content)
-            self.state.setOpenedTextFilePath(file_path)
+            if self.on_attach_click:
+                self.on_attach_click(file_path)
         else:
             print("Seleção de arquivo cancelada.")
             
-    def _set_text(self, text):
+    def set_text(self, text):
         self.input_field.value = text
         self.page.update()
         
     def _submit_event_handle(self, e):
         texto = self.input_field.value
-        self.on_submit_click(texto)
-        self.page.go("/answers")
+        
+        if self.on_submit_click:
+            self.on_submit_click(texto)

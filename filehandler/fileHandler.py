@@ -11,29 +11,33 @@ class FileHandler():
                 content = file.read()
                 return content
         except Exception as e:
-            return -1
+            return ""
         
     def saveTextFile(self, content, path):
         """
-        Saves content to .txt file of especified path. Error = -1
+        Saves content to .txt file of especified path. Returns true in success false for error
         """
         try:
             with open(path, 'w', encoding='utf-8') as file:
                 file.write(content)
+            return True
         except Exception as e:
-            return -1
+            return False
         
-    def _setupMidiFile(self, midi_messages):
+    def _setupMidiFile(self, midi_messages, bpm: int):
         arquivo_mid = mido.MidiFile(type=1)
         trilha = mido.MidiTrack()
         arquivo_mid.tracks.append(trilha)
         
+        tempo = mido.bpm2tempo(bpm)
+        trilha.append(mido.MetaMessage('set_tempo', tempo=tempo, time=0))
+                
         for msg in midi_messages:
             trilha.append(msg)
                  
         return arquivo_mid
     
-    def salvarArquivoMidi(self, midi_messages):
-        arquivo = self._setupMidiFile(midi_messages)
+    def salvarArquivoMidi(self, midi_messages, bpm: int):
+        arquivo = self._setupMidiFile(midi_messages, bpm)
         
         arquivo.save("output.mid")

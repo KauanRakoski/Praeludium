@@ -1,47 +1,38 @@
 import flet as ft
-from filehandler.fileHandler import FileHandler
-from soundmanager.soundManager import SoundManager
+
 from .components.inputBar import InputBar
 from .components.text import Text
 from .components.verticalLayout import VerticalLayout
 from .components.logo import Logo
 from .components.playSave import playSave
-from soundmanager.soundManager import SoundManager
-from conversor.conversor import Conversor
-from conversor.defaultRules import default_rules
+
 from stateManager import StateManager
 
 class Answers(ft.View):
     def __init__(self, page, state: StateManager):
         super().__init__()
         
-        self.route = "/"
+        self.route = "/answers"
         self.page = page
-        
         self.state = state
         
         self.generated_sound = state.getMidiMessages()
         self.text_inputed = state.getText()
         
-        self.soundManager = SoundManager()
+        self.vertical_alignment = ft.MainAxisAlignment.SPACE_BETWEEN
+        self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         
-        self.fileHandler = FileHandler()
-        
-        soundControls = playSave(on_play_click=self.soundManager.play_music, 
-                                 on_save_click=self.fileHandler.salvarArquivoMidi,
-                                 on_save_text_click=self.fileHandler.saveTextFile, 
-                                 page=page, 
-                                 state = self.state,
-                                 )
-        
-        rules = default_rules()
-        self.conversor = Conversor(rules)
-        
-        inputBar = InputBar(page=self.page, state = self.state, on_attach_click=self.fileHandler.loadTxtFile, on_submit_click=self.submit_event)    
         welcomeTitle = Text("Suas respostas!")
         welcomeTitle.setBold(True)
         
-        generated = Text(f"Seu texto: {self.text_inputed}", "small")
+        generated_text = Text(f"Seu texto: {self.text_inputed}", "small")
+        self.generated_text = generated_text
+        
+        backButton = ft.ElevatedButton(
+            "Voltar",
+            icon=ft.Icons.ARROW_BACK,
+            on_click=lambda e: self.page.go("/")  
+        )
         
         hint = ft.Text(
             spans=[
@@ -55,16 +46,24 @@ class Answers(ft.View):
             text_align=ft.TextAlign.CENTER
         )
         
-        logo = Logo()
+        soundControls = playSave(on_play_click=self.state.sound_service.play_music, 
+                                 on_save_click=self.state.file_service.salvarArquivoMidi,
+                                 on_save_text_click=self.state.file_service.saveTextFile, 
+                                 page=page, 
+                                 state = self.state,
+                                 )
         
-        self.vertical_alignment = ft.MainAxisAlignment.SPACE_BETWEEN
-        self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        inputBar = InputBar(page=self.page, state = self.state, on_attach_click=self.state.file_service.loadTxtFile, on_submit_click=self.submit_event)    
+        self.input_bar = inputBar
+        self.page.overlay.append(self.input_bar.file_picker)
 
         textLayout = VerticalLayout()
-
+        logo = Logo()
+        
         textLayout.add_control(logo)
         textLayout.add_control(welcomeTitle)
-        textLayout.add_control(generated)
+        textLayout.add_control(generated_text)
+        textLayout.add_control(backButton)
         textLayout.add_control(hint)
         textLayout.add_control(soundControls)
         
@@ -80,8 +79,6 @@ class Answers(ft.View):
         ]
         
     def submit_event(self, texto):
-        music_events = self.conversor.converter_texto(texto)
-        self.fileHandler.salvarArquivoMidi(music_events)
-        
-        self.state.setText(texto)
-        self.state.setMidiMessages(music_events)
+        self.state.process_text_to_music(texto)
+        self.generated_text.value = f"Seu texto: {texto}"
+        self.page.update()
