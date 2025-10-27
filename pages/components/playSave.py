@@ -1,5 +1,6 @@
 import flet as ft
 from stateManager import StateManager
+from flet_toast import flet_toast
 
 class playSave(ft.Container):
     def __init__(self, page, state: StateManager, on_play_click, on_save_click, on_save_text_click):
@@ -35,7 +36,8 @@ class playSave(ft.Container):
             icon=ft.Icons.DOWNLOAD_ROUNDED,
             on_click=self._handle_save_text,
             bgcolor=ft.Colors.WHITE12,
-            color=ft.Colors.WHITE
+            color=ft.Colors.WHITE,
+            visible = False
         )
         
         controls = [
@@ -46,6 +48,8 @@ class playSave(ft.Container):
         
         row = ft.Row(controls, alignment=ft.MainAxisAlignment.CENTER)
         self.content = row
+
+        self.update_save_text_button_visibility()
     
     def _open_save_dialog(self, e):
         """Este método é chamado pelo botão 'Salvar' para abrir o diálogo."""
@@ -66,5 +70,27 @@ class playSave(ft.Container):
     def _handle_save_text(self, e):
         path = self.state.getOpenedTextFilePath()
         content = self.state.getText()
-        self.on_save_text_click(content, path)
+        rslt = self.on_save_text_click(content, path)
+
+        #saveTextFile method returns either true (if it could save the file) or false (if it failed)
+        if rslt:
+            flet_toast.sucess(
+                page = self.page,
+                message = "Arquivo salvo com sucesso!"
+            )
+        else:
+            flet_toast.error(
+                page = self.page,
+                message = "Erro salvar o arquivo!"
+            )
+    
+    def update_save_text_button_visibility(self):
+        path = self.state.getOpenedTextFilePath()
+
+        if path:
+            self.save_text_button.visible = True
+        else:
+            self.save_text_button.visible = False
+        self.page.update()
+            
         
