@@ -43,22 +43,31 @@ def default_rules():
         'f': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
         'g': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
         'h': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        ';': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
 
         # --- REGRAS DE CONTROLE ---
         ' ': {'type': 'double_volume', 'value': None, 'description': 'Aumenta o volume para o DOBRO'},
-        '?': {'type': 'increase_octave', 'value': 1, 'description': 'Aumenta UMA oitava'},
+        '?': {'type': 'random_note', 'value': None, 'description': 'Toca uma nota aleatória (A a H)'},
         '.': {'type': 'increase_octave', 'value': 1, 'description': 'Aumenta UMA oitava'},
+
+        'O': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
+        'o': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
+        'I': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
+        'i': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
+        'U': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
+        'u': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
 
         # --- REGRAS DE MUDANÇA DE INSTRUMENTO (General MIDI) ---
         '!': {'type': 'set_instrument', 'value': 24, 'description': 'Troca para Bandoneon (#24)'},
-        'O': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        'o': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        'I': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        'i': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        'U': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        'u': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        '\n': {'type': 'set_instrument', 'value': 123, 'description': 'Troca para Ondas do Mar (#123)'},
-        ';': {'type': 'set_instrument', 'value': 15, 'description': 'Troca para Tubular Bells (#15)'},
+        #'O': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
+        #'o': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
+        #'I': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
+        #'i': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
+        #'U': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
+        #'u': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
+        #'\n': {'type': 'set_instrument', 'value': 123, 'description': 'Troca para Ondas do Mar (#123)'},
+        '\n': {'type': 'instrument_by_previous', 'value': None, 'description': 'Troca instrumento conforme o caractere anterior'},
+        #';': {'type': 'set_instrument', 'value': 15, 'description': 'Troca para Tubular Bells (#15)'},
         ',': {'type': 'set_instrument', 'value': 114, 'description': 'Troca para Agogô (#114)'},
     }
     
