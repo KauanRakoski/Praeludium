@@ -18,7 +18,6 @@ APP_ROUTES = {
 DEFAULT_ROUTE = "/"
 DEFAULT_VIEW = Index
 
-# recebe somente pagina cxomo argumento
 def main(page: ft.Page):
    
     page.title = "Praeludium"

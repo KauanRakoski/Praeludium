@@ -63,7 +63,7 @@ class StateManager():
         self.setText(texto)
         self.setMidiMessages(music_events)
 
-        self.page.go("/answers")
+        self.page.go("/answers") 
         
     def handle_file_selected(self, file_path):
         """
