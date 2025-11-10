@@ -3,7 +3,7 @@ from stateManager import StateManager
 from flet_toast import flet_toast
 
 class playSave(ft.Container):
-    def __init__(self, page, state: StateManager, on_play_click, on_save_click, on_save_text_click):
+    def __init__(self, page, state: StateManager, on_play_click, on_save_click, on_save_text_click, on_pause_click, on_reset_click):
         super().__init__()
         
         self.page = page
@@ -39,9 +39,27 @@ class playSave(ft.Container):
             color=ft.Colors.WHITE,
             visible = False
         )
+
+        self.pause_button = ft.ElevatedButton(
+            text="Pausar/Voltar",
+            icon=ft.Icons.PAUSE_ROUNDED,
+            on_click=on_pause_click,  
+            bgcolor=ft.Colors.WHITE12,
+            color=ft.Colors.WHITE
+        )
+        
+        self.reset_button = ft.ElevatedButton(
+            text="Resetar",
+            icon=ft.Icons.STOP_ROUNDED,
+            on_click=on_reset_click, 
+            bgcolor=ft.Colors.WHITE12,
+            color=ft.Colors.WHITE
+        )
         
         controls = [
             self.play_button,
+            self.pause_button,
+            self.reset_button,
             self.save_button,
             self.save_text_button
         ]

@@ -77,5 +77,4 @@ class Index (ft.View):
             
     def _submit_event_handler(self, texto):
         self.state.process_text_to_music(texto)
-        
         # self.page.go("/answers")  
