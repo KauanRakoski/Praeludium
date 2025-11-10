@@ -162,24 +162,25 @@ class Conversor():
         context.
         context.resetar_oitava'''
     
-
     def _handle_contextual_char(self, char: str, context: MidiContext, messages: list):
         """ Processa caracteres que NÃO estão no mapa de regras. """
+        pass
         
-        if char.isdigit():
-            digito = int(char)
-            if digito % 2 == 0:
-                context.setar_instrumento(context.instrumento_atual + digito)
-                messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
-            else:
-                context.setar_instrumento_tubular_bells()
-                messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
+        #if char.isdigit():
+        #     digito = int(char)
+        #     if digito % 2 == 0:
+        #         context.setar_instrumento(context.instrumento_atual + digito)
+        #         messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
+        #     else:
+        #         context.setar_instrumento_tubular_bells()
+        #         messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
         
-        elif char.isalpha() and char.lower() not in 'aeiou' and char.upper() not in 'ABCDEFGH':
-            self._handle_repeat_or_pause(context, messages)
+        # elif char.isalpha() and char.lower() not in 'aeiou' and char.upper() not in 'ABCDEFGH':
+        #     self._handle_repeat_or_pause(context, messages)
             
-        else:
-            self._handle_repeat_or_pause(context, messages)
+        # else:
+        #     self._handle_repeat_or_pause(context, messages)
+
 
     def _handle_repeat_or_pause(self, context: MidiContext, messages: list):
         if context.ultima_nota_tocada is not None:
