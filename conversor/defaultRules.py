@@ -25,25 +25,35 @@ def default_rules():
     """
     rules = {
         # --- REGRAS DE NOTAS MUSICAIS ---
+        # --- REGRAS DE NOTAS MUSICAIS ---
         'A': {'type': 'note', **NOTES['A4']},
+        'a': {'type': 'note', **NOTES['A4']}, 
         'B': {'type': 'note', **NOTES['B4']},
+        'b': {'type': 'note', **NOTES['B4']}, 
         'C': {'type': 'note', **NOTES['C4']},
+        'c': {'type': 'note', **NOTES['C4']}, 
         'D': {'type': 'note', **NOTES['D4']},
+        'd': {'type': 'note', **NOTES['D4']}, 
         'E': {'type': 'note', **NOTES['E4']},
+        'e': {'type': 'note', **NOTES['E4']}, 
         'F': {'type': 'note', **NOTES['F4']},
+        'f': {'type': 'note', **NOTES['F4']}, 
         'G': {'type': 'note', **NOTES['G4']},
+        'g': {'type': 'note', **NOTES['G4']}, 
         'H': {'type': 'note', **NOTES['Bb4']},
+        'h': {'type': 'note', **NOTES['Bb4']}, 
 
         # --- REGRAS DE PAUSA/SILÊNCIO ---
-        'a': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        'b': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        'c': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        'd': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        'e': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        'f': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        'g': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        'h': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
         ';': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'a': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'b': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'c': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'd': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'e': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'f': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'g': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        # 'h': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
+        
 
         # --- REGRAS DE CONTROLE ---
         ' ': {'type': 'double_volume', 'value': None, 'description': 'Aumenta o volume para o DOBRO'},
