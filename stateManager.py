@@ -5,6 +5,7 @@ VOLUME_PADRAO = 64
 BPM_PADRAO = 120
 
 class StateManager():
+    
     def __init__(self, page: ft.Page):
         
         self.page = page
@@ -30,7 +31,7 @@ class StateManager():
 
     def set_initial_bpm(self, value: int):
         self.initial_bpm = int(value)
-        
+   
     def getOpenedTextFilePath(self):
         return self.opened_text_file_path
     
@@ -48,18 +49,20 @@ class StateManager():
     
     def setMidiMessages(self, messages):
         self.midi_messages = messages
-        
+
+  
     def process_text_to_music(self, texto):
         if not self.conversor_service or not self.file_service:
             print("Erro: Serviços não inicializados no StateManager")
-            return
-            
+            return   
         music_events = self.conversor_service.converter_texto(texto, initial_octave=self.initial_octave,
             initial_volume=self.initial_volume)
+        
         self.file_service.salvarArquivoMidi(music_events, self.initial_bpm)
         
         self.setText(texto)
         self.setMidiMessages(music_events)
+
         self.page.go("/answers")
         
     def handle_file_selected(self, file_path):

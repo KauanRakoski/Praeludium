@@ -1,9 +1,10 @@
+
 import flet as ft
+
 from pages.index import Index
 from pages.documentation import Docs
 from pages.answers import Answers
 from stateManager import StateManager
-
 from filehandler.fileHandler import FileHandler
 from conversor.conversor import Conversor, default_rules
 from soundmanager.soundManager import SoundManager
@@ -17,16 +18,17 @@ APP_ROUTES = {
 DEFAULT_ROUTE = "/"
 DEFAULT_VIEW = Index
 
+# recebe somente pagina cxomo argumento
 def main(page: ft.Page):
+   
     page.title = "Praeludium"
-    
     page.theme_mode = ft.ThemeMode.DARK
     page.vertical_alignment = ft.MainAxisAlignment.SPACE_BETWEEN
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     
     state = StateManager(page)
-    
     state.rules = default_rules()
+    
     state.conversor_service = Conversor(state.rules)
     state.file_service = FileHandler()
     state.sound_service = SoundManager()

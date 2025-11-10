@@ -1,4 +1,6 @@
+# importa funcao de mapeamento e as notas musicais
 from .defaultRules import default_rules, NOTES
+
 import mido
 import random
 
@@ -13,10 +15,8 @@ CARACTERES_NOTAS = set('ABCDEFG')
 TELEPHONE_RING = 124
 PIANO = 0
 
-#há sequências de 4 caracteres como "OIT+" e "BPM-" que são consideradas pelo programa como um comando só
 COMPOUND_CHARACTER_SIZE = 4 
 
-# Mapeamento de caractere anterior -> instrumento MIDI (General MIDI)
 INSTRUMENT_MAP = {
     'A': 24,  # Violão com corda de Nylon
     'B': 0,   # Piano Acústico
@@ -54,6 +54,7 @@ class MidiContext:
         
 class Conversor():
     def __init__(self, rules):
+        
         self.rules = rules
         
         self.action_handlers = {
@@ -91,9 +92,7 @@ class Conversor():
                                           time=0))
         
         i = 0
-
         while(i < len(texto)):
-            
             if i+(COMPOUND_CHARACTER_SIZE-1) < len(texto):
                 seq = texto[i:i+COMPOUND_CHARACTER_SIZE]
                 if seq == "OIT+" or seq == "OIT-":
@@ -105,7 +104,7 @@ class Conversor():
                     self._handle_bpm_change_sequence(seq[COMPOUND_CHARACTER_SIZE-1], context)
                     i += COMPOUND_CHARACTER_SIZE
                     continue
-
+            
             char = texto[i]
             self._processar_char(char, context, midi_messages)
             context.ultimo_caractere = char
@@ -116,6 +115,7 @@ class Conversor():
     def _processar_char(self, char: str, context: MidiContext, messages: list):
         if char in self.rules:
             regra = self.rules[char]
+            
             tipo_acao = regra.get('type')
             valor = regra.get('value')
             
@@ -152,7 +152,7 @@ class Conversor():
 
     def _handle_decrease_octave(self, context: MidiContext):
         context.oitava_atual -= 1
-        context.resetar_oitava
+        context.resetar_oitava()
     
     '''def _handle_decrease_bpm(self, context: MidiContext, valor, messages: list):
         context.oitava_atual -= 1
