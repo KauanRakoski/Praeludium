@@ -30,10 +30,16 @@ INSTRUMENT_MAP = {
 
 
 class MidiContext:
-    def __init__(self, initial_volume, initial_octave):
+
+    # Esses valores foram escolhidos arbitrariamente
+    MIN_BPM = 30
+    MAX_BPM = 300
+    
+    def __init__(self, initial_volume, initial_octave, initial_bpm):
         self.instrumento_atual = PIANO  
         self.volume_atual = initial_volume
         self.oitava_atual = initial_octave
+        self.bpm_atual = initial_bpm
         self.ultima_nota_tocada = None
         self.ultimo_caractere = None
 
@@ -51,6 +57,16 @@ class MidiContext:
         
     def setar_instrumento_tubular_bells(self):
         self.instrumento_atual = 15
+    
+    def ajustar_bpm(self, valor_mudanca:int):
+        self.bpm_atual += valor_mudanca
+        # Usando max/min para "prender" o valor dentro dos limites
+        self.bpm_atual = max(self.MIN_BPM, min(self.MAX_BPM, self.bpm_atual))
+        
+        # if self.bpm_atual < 20:  # Limite mínimo de segurança
+        #     self.bpm_atual = 20
+        # if self.bpm_atual > 500: # Limite máximo de segurança
+        #     self.bpm_atual = 500
         
 class Conversor():
     def __init__(self, rules):
@@ -83,8 +99,8 @@ class Conversor():
         
         return midi_messages'''
             
-    def converter_texto(self, texto: str, initial_volume: int, initial_octave: int) -> list:
-        context = MidiContext(initial_volume, initial_octave)
+    def converter_texto(self, texto: str, context: MidiContext) -> list:
+        # context = MidiContext(initial_volume, initial_octave)
         midi_messages = []
         
         midi_messages.append(mido.Message('program_change', 
@@ -243,7 +259,9 @@ class Conversor():
     def _handle_bpm_change_sequence(self, signal, context : MidiContext):
         if signal  == '+':
            # self._handle_increase_bpm
-           print("mais")
+           context.ajustar_bpm(80)
+           #print("Aumentar BPM")
         else:
             #self._handle_decrease_bpm
-            print("menos")
+            context.ajustar_bpm(-80)
+            #print("Diminuir BPM")

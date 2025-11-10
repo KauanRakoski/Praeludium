@@ -1,4 +1,5 @@
 import flet as ft
+from conversor.conversor import Conversor, default_rules, MidiContext
 
 OITAVA_PADRAO = 4
 VOLUME_PADRAO = 64
@@ -54,11 +55,19 @@ class StateManager():
     def process_text_to_music(self, texto):
         if not self.conversor_service or not self.file_service:
             print("Erro: Serviços não inicializados no StateManager")
-            return   
-        music_events = self.conversor_service.converter_texto(texto, initial_octave=self.initial_octave,
-            initial_volume=self.initial_volume)
+            return
+
+        contexto_da_musica = MidiContext(
+            initial_volume=self.initial_volume,
+            initial_octave=self.initial_octave,
+            initial_bpm=self.initial_bpm
+        )
+
+        music_events = self.conversor_service.converter_texto(texto, contexto_da_musica)
+
+        final_bpm = contexto_da_musica.bpm_atual
         
-        self.file_service.salvarArquivoMidi(music_events, self.initial_bpm)
+        self.file_service.salvarArquivoMidi(music_events, final_bpm)
         
         self.setText(texto)
         self.setMidiMessages(music_events)
