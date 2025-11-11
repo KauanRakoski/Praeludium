@@ -64,10 +64,8 @@ class StateManager():
         )
 
         music_events = self.conversor_service.converter_texto(texto, contexto_da_musica)
-
-        final_bpm = contexto_da_musica.bpm_atual
         
-        self.file_service.salvarArquivoMidi(music_events, final_bpm)
+        self.file_service.salvarArquivoMidi(music_events)
         
         self.setText(texto)
         self.setMidiMessages(music_events)

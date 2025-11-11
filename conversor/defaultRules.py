@@ -58,7 +58,7 @@ def default_rules():
         # --- REGRAS DE CONTROLE ---
         ' ': {'type': 'double_volume', 'value': None, 'description': 'Aumenta o volume para o DOBRO'},
         '?': {'type': 'random_note', 'value': None, 'description': 'Toca uma nota aleatória (A a H)'},
-        '.': {'type': 'increase_octave', 'value': 1, 'description': 'Aumenta UMA oitava'},
+        #'.': {'type': 'increase_octave', 'value': 1, 'description': 'Aumenta UMA oitava'},
 
         'O': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
         'o': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},

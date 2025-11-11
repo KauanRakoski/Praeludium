@@ -49,7 +49,7 @@ class Answers(ft.View):
         soundControls = playSave(on_play_click=self.state.sound_service.play_music,
                                  on_pause_click=self.state.sound_service.pause_music,
                                  on_reset_click=self.state.sound_service.reset_music, 
-                                 on_save_click=self.state.file_service.salvarArquivoMidi,
+                                 on_save_click=self.state.file_service.saveExternalMidi,
                                  on_save_text_click=self.state.file_service.saveTextFile, 
                                  page=page, 
                                  state = self.state,

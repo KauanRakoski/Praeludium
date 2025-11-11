@@ -100,12 +100,14 @@ class Conversor():
         return midi_messages'''
             
     def converter_texto(self, texto: str, context: MidiContext) -> list:
-        # context = MidiContext(initial_volume, initial_octave)
         midi_messages = []
         
         midi_messages.append(mido.Message('program_change', 
                                           program=context.instrumento_atual, 
                                           time=0))
+        
+        initial_tempo = mido.bpm2tempo(context.bpm_atual)
+        midi_messages.append(mido.MetaMessage('set_tempo', tempo=initial_tempo, time=0))
         
         i = 0
         while(i < len(texto)):
@@ -117,7 +119,7 @@ class Conversor():
                     continue
 
                 elif seq == "BPM+" or seq == "BPM-":
-                    self._handle_bpm_change_sequence(seq[COMPOUND_CHARACTER_SIZE-1], context)
+                    self._handle_bpm_change_sequence(seq[COMPOUND_CHARACTER_SIZE-1], context, midi_messages)
                     i += COMPOUND_CHARACTER_SIZE
                     continue
             
@@ -159,7 +161,7 @@ class Conversor():
         context.setar_instrumento(valor)
         messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
 
-    def _handle_double_volume(self, context: MidiContext):
+    def _handle_double_volume(self, context: MidiContext, valor, messages):
         context.dobrar_volume()
 
     def _handle_increase_octave(self, context: MidiContext):
@@ -256,12 +258,11 @@ class Conversor():
         else:
             self._handle_decrease_octave(context)
 
-    def _handle_bpm_change_sequence(self, signal, context : MidiContext):
+    def _handle_bpm_change_sequence(self, signal, context : MidiContext, messages: list):
         if signal  == '+':
-           # self._handle_increase_bpm
            context.ajustar_bpm(80)
-           #print("Aumentar BPM")
         else:
-            #self._handle_decrease_bpm
             context.ajustar_bpm(-80)
-            #print("Diminuir BPM")
+            
+        novo_tempo = mido.bpm2tempo(context.bpm_atual)
+        messages.append(mido.MetaMessage('set_tempo', tempo=novo_tempo, time=0))

@@ -41,7 +41,7 @@ class playSave(ft.Container):
         )
 
         self.pause_button = ft.ElevatedButton(
-            text="Pausar/Voltar",
+            text="Pausar/Despausar",
             icon=ft.Icons.PAUSE_ROUNDED,
             on_click=on_pause_click,  
             bgcolor=ft.Colors.WHITE12,

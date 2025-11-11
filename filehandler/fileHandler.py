@@ -1,4 +1,7 @@
 import mido
+import shutil
+
+OUTPUT_FILE_NAME = "output.mid"
 
 class FileHandler():
     # self is needed for python class compatibility in inputbar -> loadTxtFile
@@ -24,20 +27,28 @@ class FileHandler():
         except Exception as e:
             return False
         
-    def _setupMidiFile(self, midi_messages, bpm: int):
+    def _setupMidiFile(self, midi_messages):
         arquivo_mid = mido.MidiFile(type=1)
         trilha = mido.MidiTrack()
         arquivo_mid.tracks.append(trilha)
         
-        tempo = mido.bpm2tempo(bpm)
-        trilha.append(mido.MetaMessage('set_tempo', tempo=tempo, time=0))
-                
         for msg in midi_messages:
             trilha.append(msg)
                  
         return arquivo_mid
     
-    def salvarArquivoMidi(self, midi_messages, bpm: int):
-        arquivo = self._setupMidiFile(midi_messages, bpm)
+    def salvarArquivoMidi(self, midi_messages):
+        arquivo = self._setupMidiFile(midi_messages)
         
-        arquivo.save("output.mid")
+        arquivo.save(OUTPUT_FILE_NAME)
+        
+    def saveExternalMidi(self, user_selected_path: str) -> bool:
+        '''
+        Copies the generated output.mid to path selected by user
+        '''
+        try:
+            shutil.copy(OUTPUT_FILE_NAME, user_selected_path)
+            return True
+        except Exception as e:
+            return False
+        

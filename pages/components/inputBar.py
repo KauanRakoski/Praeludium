@@ -34,10 +34,13 @@ class InputBar(ft.Row):
                 on_click=self._open_file_picker
             ),
             self.input_field,
-            ft.IconButton(
-                icon=ft.Icons.PLAY_ARROW_ROUNDED,
+            ft.FilledButton(
+                text="Converter",
                 tooltip="Gerar música",
-                on_click=self._submit_event_handle
+                on_click=self._submit_event_handle,
+                style=ft.ButtonStyle(
+                    padding=15  
+                )
             ),
         ]
         
