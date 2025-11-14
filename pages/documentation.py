@@ -2,8 +2,10 @@ import flet as ft
 from .components.inputBar import InputBar
 from .components.text import Text
 from .components.verticalLayout import VerticalLayout
-from .components.ruleTable import RuleTable
+from .components.ruleTable import RuleTable, DOCS_TABLE_WIDTH
 from .components.logo import Logo
+
+
 
 class Docs (ft.View):
     def __init__(self, page: ft.Page, state):
@@ -45,7 +47,20 @@ class Docs (ft.View):
         
         self.controls = [
             textLayout,
-            inputBar
+        
+            # Esta ft.Row quebra o STRETCH e centraliza seu conteúdo
+            ft.Row(
+                controls=[
+                    # Este Container define a largura
+                    ft.Container(
+                        content=inputBar,
+                        width=DOCS_TABLE_WIDTH,
+                        alignment=ft.alignment.center
+                    )
+                ],
+                # Row centraliza o Container
+                alignment=ft.MainAxisAlignment.CENTER
+            )
         ]
         
     def on_file_selected_handler(self, file_path):

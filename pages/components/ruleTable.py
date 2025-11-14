@@ -1,4 +1,5 @@
 import flet as ft
+DOCS_TABLE_WIDTH = 700
 
 class RuleTable(ft.DataTable):
     def __init__(self, rules):
@@ -26,7 +27,7 @@ class RuleTable(ft.DataTable):
             data_row_color={"hover": ft.Colors.WHITE10},
             border=ft.border.all(1, ft.Colors.WHITE30),
             border_radius=ft.border_radius.all(10),
-            width=700,
+            width=DOCS_TABLE_WIDTH,
         )
         
               
