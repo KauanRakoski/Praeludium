@@ -14,9 +14,9 @@ class Docs (ft.View):
         self.state = state
         
         self.vertical_alignment = ft.MainAxisAlignment.SPACE_BETWEEN
-        self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        self.horizontal_alignment = ft.CrossAxisAlignment.STRETCH
               
-        welcomeTitle = Text("Bem Vindo à documentação!")
+        welcomeTitle = Text("Bem Vindo à Documentação!")
         welcomeTitle.setBold(True)
         hint = Text("Aqui você encontra as correspondências entre o texto e as ações musicais a serem tomadas", size="small")
         logo = Logo()
