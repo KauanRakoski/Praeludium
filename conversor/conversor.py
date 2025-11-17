@@ -1,5 +1,5 @@
 # importa funcao de mapeamento e as notas musicais
-from .defaultRules import default_rules, NOTES
+from .defaultRules import default_rules, NOTES, INSTRUMENT_MAP
 
 import mido
 import random
@@ -16,17 +16,6 @@ TELEPHONE_RING = 124
 PIANO = 0
 
 COMPOUND_CHARACTER_SIZE = 4 
-
-INSTRUMENT_MAP = {
-    'A': 24,  # Violão com corda de Nylon
-    'B': 0,   # Piano Acústico
-    'C': 40,  # Violino
-    'D': 56,  # Trompete
-    'E': 73,  # Flauta
-    'F': 14,  # Tubular Bells
-    'G': 19,  # órgão eclesiástico
-    'H': 48,  # Cordas 
-}
 
 
 class MidiContext:

@@ -16,6 +16,20 @@ NOTES = {
     'Bb4': {'value': 70, 'description': 'Nota Si Bemol'},
 }
 
+INSTRUMENT_MAP = {
+    'A': 24,  # Violão com corda de Nylon
+    'B': 0,   # Piano Acústico
+    'C': 40,  # Violino
+    'D': 56,  # Trompete
+    'E': 73,  # Flauta
+    'F': 14,  # Tubular Bells
+    'G': 19,  # órgão eclesiástico
+    'H': 48,  # Cordas
+    'O': 12, # Marimba
+    'E': 13, # Xylophone
+    'I': 47, # Harpa
+}
+
 def default_rules():
     """
     Retorna o dicionário completo com as regras de mapeamento de texto para música.
