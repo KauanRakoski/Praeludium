@@ -1,9 +1,9 @@
 
-# Parâmetros de Execução Padrão
-OITAVA_PADRAO = 4
-VOLUME_PADRAO = 64  # Volume médio (MIDI vai de 0 a 127)
-BPM_PADRAO = 120 
-DURACAO_PADRAO_TICKS = 480 
+# default execution parameters
+DEFAULT_OCTAVE = 4
+DEFAULT_VOLUME = 64  # Volume médio (MIDI goes from  0 up to  127)
+DEFAULT_BPM = 120 
+DEFAULT_TICKS_DURATION = 480 
 
 NOTES = {
     'C4': {'value': 60, 'description': 'Nota Dó'},
@@ -32,12 +32,11 @@ INSTRUMENT_MAP = {
 
 def default_rules():
     """
-    Retorna o dicionário completo com as regras de mapeamento de texto para música.
-    A estrutura é otimizada para ser usada tanto pelo conversor quanto pela
-    tabela de documentação.
+    Returns the complete dictionary with the text-to-music mapping rules. 
+    The structure is optimized for use by both the converter and the documentation table.
     """
     rules = {
-        # --- REGRAS DE NOTAS MUSICAIS ---
+        # --- MUSICAL NOTES RULES ---
         'A': {'type': 'note', **NOTES['A4']},
         'a': {'type': 'note', **NOTES['A4']}, 
         'B': {'type': 'note', **NOTES['B4']},
@@ -55,10 +54,10 @@ def default_rules():
         'H': {'type': 'note', **NOTES['Bb4']},
         'h': {'type': 'note', **NOTES['Bb4']}, 
 
-        # --- REGRAS DE PAUSA/SILÊNCIO ---
-        ';': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},       
+        # --- PAUSE/SILENCE RULES ---
+        ';': {'type': 'pause', 'value': DEFAULT_TICKS_DURATION, 'description': 'Silêncio ou Pausa'},       
 
-        # --- REGRAS DE CONTROLE ---
+        # --- CONTROL RULES ---
         ' ': {'type': 'double_volume', 'value': None, 'description': 'Aumenta o volume para o DOBRO'},
         '?': {'type': 'random_note', 'value': None, 'description': 'Toca uma nota aleatória (A a H)'},
 
@@ -69,7 +68,7 @@ def default_rules():
         'U': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
         'u': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
 
-        # --- REGRAS DE MUDANÇA DE INSTRUMENTO (General MIDI) ---
+        # --- INSTRUMENT CHANGE RULES (General MIDI) ---
         '!': {'type': 'set_instrument', 'value': 24, 'description': 'Troca para Bandoneon (#24)'},
         '\n': {'type': 'instrument_by_previous', 'value': None, 'description': 'Troca instrumento conforme o caractere anterior'},
         ',': {'type': 'set_instrument', 'value': 114, 'description': 'Troca para Agogô (#114)'},

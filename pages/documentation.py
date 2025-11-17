@@ -64,5 +64,5 @@ class Docs (ft.View):
         if content is not None:
             self.input_bar.set_text(content)
             
-    def _submit_event_handler(self, texto):
-        self.state.process_text_to_music(texto)
+    def _submit_event_handler(self, text):
+        self.state.process_text_to_music(text)

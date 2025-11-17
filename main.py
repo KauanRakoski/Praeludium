@@ -26,7 +26,8 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     
     state = StateManager(page)
-    state.rules = default_rules()
+
+    state.set_default_rules(default_rules())
     
     state.conversor_service = Conversor(state.rules)
     state.file_service = FileHandler()

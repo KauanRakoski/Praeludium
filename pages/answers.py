@@ -79,7 +79,7 @@ class Answers(ft.View):
             inputBar
         ]
         
-    def submit_event(self, texto):
-        self.state.process_text_to_music(texto)
-        self.generated_text.value = f"Seu texto: {texto}"
+    def submit_event(self, text):
+        self.state.process_text_to_music(text)
+        self.generated_text.value = f"Seu texto: {text}"
         self.page.update()

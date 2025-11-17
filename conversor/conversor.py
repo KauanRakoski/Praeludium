@@ -4,14 +4,14 @@ from .defaultRules import default_rules, NOTES, INSTRUMENT_MAP
 import mido
 import random
 
-OITAVA_PADRAO = 4
-VOLUME_PADRAO = 64
-BPM_PADRAO = 120
-DURACAO_PADRAO_TICKS = 480
+DEFAULT_OCTAVE = 4
+DEFAULT_VOLUME = 64
+DEFAULT_BPM = 120
+DEFAULT_TICKS_DURATION = 480
 MAX_MIDI_VOLUME = 127
 MAX_MIDI_PROGRAM = 127
-NOTAS_POSSIVEIS = list(NOTES.keys())
-CARACTERES_NOTAS = set('ABCDEFG')
+POSSIBLE_NOTES = list(NOTES.keys())
+NOTE_CHARACTERS = set('ABCDEFG')
 TELEPHONE_RING = 124
 PIANO = 0
 
@@ -20,36 +20,36 @@ COMPOUND_CHARACTER_SIZE = 4
 
 class MidiContext:
 
-    # Esses valores foram escolhidos arbitrariamente
+    # Arbitrary values
     MIN_BPM = 30
     MAX_BPM = 300
     
     def __init__(self, initial_volume, initial_octave, initial_bpm):
-        self.instrumento_atual = PIANO  
-        self.volume_atual = initial_volume
-        self.oitava_atual = initial_octave
-        self.bpm_atual = initial_bpm
-        self.ultima_nota_tocada = None
-        self.ultimo_caractere = None
+        self.current_instrument = PIANO  
+        self.current_volume = initial_volume
+        self.current_octave = initial_octave
+        self.current_bpm = initial_bpm
+        self.last_played_note = None
+        self.last_character = None
 
-    def resetar_oitava(self):
-        if self.oitava_atual > 8:
-            self.oitava_atual = OITAVA_PADRAO
-        elif self.oitava_atual < 1:
-            self.oitava_atual = OITAVA_PADRAO
+    def reset_octave(self):
+        if self.current_octave > 8:
+            self.current_octave = DEFAULT_OCTAVE
+        elif self.current_octave < 1:
+            self.current_octave = DEFAULT_OCTAVE
             
-    def dobrar_volume(self):
-        self.volume_atual = min(MAX_MIDI_VOLUME, self.volume_atual * 2)
+    def double_volume(self):
+        self.current_volume = min(MAX_MIDI_VOLUME, self.current_volume * 2)
 
-    def setar_instrumento(self, valor):
-        self.instrumento_atual = valor % (MAX_MIDI_PROGRAM + 1)
+    def set_instrument(self, valor):
+        self.current_instrument = valor % (MAX_MIDI_PROGRAM + 1)
         
-    def setar_instrumento_tubular_bells(self):
-        self.instrumento_atual = 15
+    def set_instrument_tubular_bells(self):
+        self.current_instrument = 15
     
-    def ajustar_bpm(self, valor_mudanca:int):
-        self.bpm_atual += valor_mudanca
-        self.bpm_atual = max(self.MIN_BPM, min(self.MAX_BPM, self.bpm_atual))
+    def adjust_bpm(self, change_value:int):
+        self.current_bpm += change_value
+        self.current_bpm = max(self.MIN_BPM, min(self.MAX_BPM, self.current_bpm))
         
 class Conversor():
     def __init__(self, rules):
@@ -68,17 +68,17 @@ class Conversor():
 
         }
             
-    def converter_texto(self, texto: str, context: MidiContext) -> list:
+    def convert_text(self, texto: str, context: MidiContext) -> list:
         """
         Given a text and initial context, converts the text using specified rules to midi
         """
         midi_messages = []
         
         midi_messages.append(mido.Message('program_change', 
-                                          program=context.instrumento_atual, 
+                                          program=context.current_instrument, 
                                           time=0))
         
-        initial_tempo = mido.bpm2tempo(context.bpm_atual)
+        initial_tempo = mido.bpm2tempo(context.current_bpm)
         midi_messages.append(mido.MetaMessage('set_tempo', tempo=initial_tempo, time=0))
         
         i = 0
@@ -96,13 +96,13 @@ class Conversor():
                     continue
             
             char = texto[i]
-            self._processar_char(char, context, midi_messages)
-            context.ultimo_caractere = char
+            self._process_char(char, context, midi_messages)
+            context.last_character = char
             i += 1
 
         return midi_messages
     
-    def _processar_char(self, char: str, context: MidiContext, messages: list):
+    def _process_char(self, char: str, context: MidiContext, messages: list):
         if char in self.rules:
             regra = self.rules[char]
             
@@ -117,78 +117,78 @@ class Conversor():
                 print(f"Aviso: Ação desconhecida '{tipo_acao}' para o caractere '{char}'.")
             
     def _handle_note(self, context: MidiContext, valor: int, messages: list):
-        nota_real = valor + ((context.oitava_atual - 4) * 12)
-        messages.append(mido.Message('note_on', note=nota_real, velocity=context.volume_atual, time=0))
-        messages.append(mido.Message('note_off', note=nota_real, velocity=context.volume_atual, time=DURACAO_PADRAO_TICKS))
-        context.ultima_nota_tocada = nota_real
+        nota_real = valor + ((context.current_octave - 4) * 12)
+        messages.append(mido.Message('note_on', note=nota_real, velocity=context.current_volume, time=0))
+        messages.append(mido.Message('note_off', note=nota_real, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
+        context.last_played_note = nota_real
 
     def _handle_pause(self, context: MidiContext, valor: int, messages: list):
         if messages:
             messages[-1].time += valor
 
     def _handle_set_instrument(self, context: MidiContext, valor: int, messages: list):
-        context.setar_instrumento(valor)
-        messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
+        context.set_instrument(valor)
+        messages.append(mido.Message('program_change', program=context.current_instrument, time=0))
 
     def _handle_double_volume(self, context: MidiContext, valor, messages):
-        context.dobrar_volume()
+        context.double_volume()
 
     def _handle_increase_octave(self, context: MidiContext):
-        context.oitava_atual += 1
-        context.resetar_oitava()
+        context.current_octave += 1
+        context.reset_octave()
 
     def _handle_decrease_octave(self, context: MidiContext):
-        context.oitava_atual -= 1
-        context.resetar_oitava()    
+        context.current_octave -= 1
+        context.reset_octave()    
 
     def _handle_repeat_or_pause(self, context: MidiContext, messages: list):
-        if context.ultima_nota_tocada is not None:
-            messages.append(mido.Message('note_on', note=context.ultima_nota_tocada, velocity=context.volume_atual, time=0))
-            messages.append(mido.Message('note_off', note=context.ultima_nota_tocada, velocity=context.volume_atual, time=DURACAO_PADRAO_TICKS))
+        if context.last_played_note is not None:
+            messages.append(mido.Message('note_on', note=context.last_played_note, velocity=context.current_volume, time=0))
+            messages.append(mido.Message('note_off', note=context.last_played_note, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
         else:
             if messages:
-                messages[-1].time += DURACAO_PADRAO_TICKS
+                messages[-1].time += DEFAULT_TICKS_DURATION
 
     def _handle_random_note(self, context: MidiContext, valor, messages: list):
         
-        nota_escolhida = random.choice(NOTAS_POSSIVEIS)
+        nota_escolhida = random.choice(POSSIBLE_NOTES)
         valor_midi = NOTES[nota_escolhida]['value']
 
-        nota_real = valor_midi + ((context.oitava_atual - 4) * 12)
+        nota_real = valor_midi + ((context.current_octave - 4) * 12)
 
-        messages.append(mido.Message('note_on', note=nota_real, velocity=context.volume_atual, time=0))
-        messages.append(mido.Message('note_off', note=nota_real, velocity=context.volume_atual, time=DURACAO_PADRAO_TICKS))
+        messages.append(mido.Message('note_on', note=nota_real, velocity=context.current_volume, time=0))
+        messages.append(mido.Message('note_off', note=nota_real, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
 
-        context.ultima_nota_tocada = nota_real
+        context.last_played_note = nota_real
 
     def _handle_special_vowel(self, context: MidiContext, valor, messages: list):
         
-        if context.ultimo_caractere in CARACTERES_NOTAS:
-            messages.append(mido.Message('note_on', note=context.ultima_nota_tocada, velocity=context.volume_atual, time=0))
-            messages.append(mido.Message('note_off', note=context.ultima_nota_tocada, velocity=context.volume_atual, time=DURACAO_PADRAO_TICKS))
+        if context.last_character in NOTE_CHARACTERS:
+            messages.append(mido.Message('note_on', note=context.last_played_note, velocity=context.current_volume, time=0))
+            messages.append(mido.Message('note_off', note=context.last_played_note, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
         else:
-            context.setar_instrumento(TELEPHONE_RING)
-            messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
+            context.set_instrument(TELEPHONE_RING)
+            messages.append(mido.Message('program_change', program=context.current_instrument, time=0))
 
-            messages.append(mido.Message('note_on', note=60, velocity=context.volume_atual, time=0))
-            messages.append(mido.Message('note_off', note=60, velocity=context.volume_atual, time=DURACAO_PADRAO_TICKS))
+            messages.append(mido.Message('note_on', note=60, velocity=context.current_volume, time=0))
+            messages.append(mido.Message('note_off', note=60, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
 
-            context.setar_instrumento(PIANO)
-            messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
+            context.set_instrument(PIANO)
+            messages.append(mido.Message('program_change', program=context.current_instrument, time=0))
     
     def _handle_instrument_by_previous(self, context: MidiContext, valor, messages: list):
         """
         Changes instrument based on last char.
         Example A\n -> guitar, B\n -> piano
         """
-        ultimo_caractere = context.ultimo_caractere
+        last_character = context.last_character
 
-        if ultimo_caractere in INSTRUMENT_MAP:
-            context.setar_instrumento(INSTRUMENT_MAP[ultimo_caractere.upper()])
-            messages.append(mido.Message('program_change', program=context.instrumento_atual, time=0))
+        if last_character in INSTRUMENT_MAP:
+            context.set_instrument(INSTRUMENT_MAP[last_character.upper()])
+            messages.append(mido.Message('program_change', program=context.current_instrument, time=0))
         else:
             if messages:
-                messages[-1].time += DURACAO_PADRAO_TICKS
+                messages[-1].time += DEFAULT_TICKS_DURATION
 
     def _handle_octave_change_sequence(self, signal, context : MidiContext):
         if signal == '+':
@@ -198,9 +198,9 @@ class Conversor():
 
     def _handle_bpm_change_sequence(self, signal, context : MidiContext, messages: list):
         if signal  == '+':
-           context.ajustar_bpm(80)
+           context.adjust_bpm(80)
         else:
-            context.ajustar_bpm(-80)
+            context.adjust_bpm(-80)
             
-        novo_tempo = mido.bpm2tempo(context.bpm_atual)
+        novo_tempo = mido.bpm2tempo(context.current_bpm)
         messages.append(mido.MetaMessage('set_tempo', tempo=novo_tempo, time=0))
