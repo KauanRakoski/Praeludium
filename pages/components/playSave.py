@@ -70,7 +70,6 @@ class playSave(ft.Container):
         self.update_save_text_button_visibility()
     
     def _open_save_dialog(self, e):
-        """Este método é chamado pelo botão 'Salvar' para abrir o diálogo."""
         self.save_dialog.save_file(
             dialog_title="Salvar arquivo MIDI",
             file_name="musica_gerada.mid",
@@ -78,9 +77,6 @@ class playSave(ft.Container):
         )
     
     def _handle_save_dialog_result(self, e: ft.FilePickerResultEvent):
-        """
-        Este método é chamado pelo FilePicker DEPOIS que o usuário escolhe um local.
-        """
         if e.path:
             if self.on_save_click_external:
                 self.on_save_click_external(e.path)
@@ -90,7 +86,6 @@ class playSave(ft.Container):
         content = self.state.getText()
         rslt = self.on_save_text_click(content, path)
 
-        #saveTextFile method returns either true (if it could save the file) or false (if it failed)
         if rslt:
             flet_toast.sucess(
                 page = self.page,

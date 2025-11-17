@@ -11,7 +11,7 @@ class Text(ft.Text):
             self.style = ft.TextThemeStyle.HEADLINE_LARGE
         elif size == "medium":
             self.style = ft.TextThemeStyle.HEADLINE_MEDIUM
-        else: # "small" ou qualquer outro valor será o padrão
+        else:
             self.style = ft.TextThemeStyle.TITLE_LARGE
             
     def set_content(self, text_content: str):

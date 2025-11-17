@@ -2,8 +2,8 @@
 # Parâmetros de Execução Padrão
 OITAVA_PADRAO = 4
 VOLUME_PADRAO = 64  # Volume médio (MIDI vai de 0 a 127)
-BPM_PADRAO = 120  # Batidas por minuto
-DURACAO_PADRAO_TICKS = 480  # Em MIDI, 480 ticks costuma ser uma semínima em 4/4
+BPM_PADRAO = 120 
+DURACAO_PADRAO_TICKS = 480 
 
 NOTES = {
     'C4': {'value': 60, 'description': 'Nota Dó'},
@@ -16,7 +16,6 @@ NOTES = {
     'Bb4': {'value': 70, 'description': 'Nota Si Bemol'},
 }
 
-# Needs to be created in a more consistent way, just boilerplate for testing
 def default_rules():
     """
     Retorna o dicionário completo com as regras de mapeamento de texto para música.
@@ -24,7 +23,6 @@ def default_rules():
     tabela de documentação.
     """
     rules = {
-        # --- REGRAS DE NOTAS MUSICAIS ---
         # --- REGRAS DE NOTAS MUSICAIS ---
         'A': {'type': 'note', **NOTES['A4']},
         'a': {'type': 'note', **NOTES['A4']}, 
@@ -44,21 +42,11 @@ def default_rules():
         'h': {'type': 'note', **NOTES['Bb4']}, 
 
         # --- REGRAS DE PAUSA/SILÊNCIO ---
-        ';': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'a': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'b': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'c': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'd': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'e': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'f': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'g': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        # 'h': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},
-        
+        ';': {'type': 'pause', 'value': DURACAO_PADRAO_TICKS, 'description': 'Silêncio ou Pausa'},       
 
         # --- REGRAS DE CONTROLE ---
         ' ': {'type': 'double_volume', 'value': None, 'description': 'Aumenta o volume para o DOBRO'},
         '?': {'type': 'random_note', 'value': None, 'description': 'Toca uma nota aleatória (A a H)'},
-        #'.': {'type': 'increase_octave', 'value': 1, 'description': 'Aumenta UMA oitava'},
 
         'O': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
         'o': {'type': 'special_vowel', 'value': None, 'description': 'Se o som anterior era uma nota de A a G, a repete, senão emite um ring sound'},
@@ -69,15 +57,7 @@ def default_rules():
 
         # --- REGRAS DE MUDANÇA DE INSTRUMENTO (General MIDI) ---
         '!': {'type': 'set_instrument', 'value': 24, 'description': 'Troca para Bandoneon (#24)'},
-        #'O': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        #'o': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        #'I': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        #'i': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        #'U': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        #'u': {'type': 'set_instrument', 'value': 110, 'description': 'Troca para Gaita de Foles (#110)'},
-        #'\n': {'type': 'set_instrument', 'value': 123, 'description': 'Troca para Ondas do Mar (#123)'},
         '\n': {'type': 'instrument_by_previous', 'value': None, 'description': 'Troca instrumento conforme o caractere anterior'},
-        #';': {'type': 'set_instrument', 'value': 15, 'description': 'Troca para Tubular Bells (#15)'},
         ',': {'type': 'set_instrument', 'value': 114, 'description': 'Troca para Agogô (#114)'},
     }
     

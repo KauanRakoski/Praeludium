@@ -5,8 +5,6 @@ from .components.verticalLayout import VerticalLayout
 from .components.ruleTable import RuleTable, DOCS_TABLE_WIDTH
 from .components.logo import Logo
 
-
-
 class Docs (ft.View):
     def __init__(self, page: ft.Page, state):
         super().__init__()
@@ -48,17 +46,14 @@ class Docs (ft.View):
         self.controls = [
             textLayout,
         
-            # Esta ft.Row quebra o STRETCH e centraliza seu conteúdo
             ft.Row(
                 controls=[
-                    # Este Container define a largura
                     ft.Container(
                         content=inputBar,
                         width=DOCS_TABLE_WIDTH,
                         alignment=ft.alignment.center
                     )
                 ],
-                # Row centraliza o Container
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ]
@@ -71,4 +66,3 @@ class Docs (ft.View):
             
     def _submit_event_handler(self, texto):
         self.state.process_text_to_music(texto)
-        # self.page.go("/answers")

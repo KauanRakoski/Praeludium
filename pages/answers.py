@@ -47,7 +47,7 @@ class Answers(ft.View):
         )
         
         soundControls = playSave(on_play_click=self.state.sound_service.play_music,
-                                 on_pause_click=self.state.sound_service.pause_music,
+                                 on_pause_click=self.state.sound_service.pause_or_unpause_music,
                                  on_reset_click=self.state.sound_service.reset_music, 
                                  on_save_click=self.state.file_service.saveExternalMidi,
                                  on_save_text_click=self.state.file_service.saveTextFile, 
@@ -69,7 +69,6 @@ class Answers(ft.View):
         textLayout.add_control(hint)
         textLayout.add_control(soundControls)
         
-        # It is necessary to use a container for margin adjustment, column does not have it
         HelloContainer = ft.Container(
                         content=textLayout,
                         margin=ft.margin.only(top=200)

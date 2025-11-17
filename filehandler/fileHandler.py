@@ -4,10 +4,11 @@ import shutil
 OUTPUT_FILE_NAME = "output.mid"
 
 class FileHandler():
-    # self is needed for python class compatibility in inputbar -> loadTxtFile
+    # IMPORTANT: self is not directly used but is needed for python class compatibility in inputbar -> loadTxtFile.
+    # Otherwise a expected one but got two arguments will be thrown
     def loadTxtFile(self, path):
         """
-        Returns content for txt file of given path. Error = -
+        Returns content for txt file of given path. Error = empty string
         """
         try:
             with open(path, 'r', encoding='utf-8') as file:

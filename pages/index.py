@@ -57,7 +57,6 @@ class Index (ft.View):
         textLayout.add_control(welcomeTitle)
         textLayout.add_control(hint)
         
-        # It is necessary to use a container for margin adjustment, column does not have it
         HelloContainer = ft.Container(
                         content=textLayout,
                         margin=ft.margin.only(top=200)
@@ -77,4 +76,3 @@ class Index (ft.View):
             
     def _submit_event_handler(self, texto):
         self.state.process_text_to_music(texto)
-        # self.page.go("/answers")  
