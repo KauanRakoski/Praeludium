@@ -31,6 +31,7 @@ class MidiContext:
         self.current_bpm = initial_bpm
         self.last_played_note = None
         self.last_character = None
+        self.pending_pause_ticks = 0
 
     def reset_octave(self):
         if self.current_octave > 8:
@@ -50,6 +51,9 @@ class MidiContext:
     def adjust_bpm(self, change_value:int):
         self.current_bpm += change_value
         self.current_bpm = max(self.MIN_BPM, min(self.MAX_BPM, self.current_bpm))
+        
+    def zero_pending_time(self):
+        self.pending_pause_ticks = 0
         
 class Conversor():
     def __init__(self, rules):
@@ -118,13 +122,13 @@ class Conversor():
             
     def _handle_note(self, context: MidiContext, valor: int, messages: list):
         nota_real = valor + ((context.current_octave - 4) * 12)
-        messages.append(mido.Message('note_on', note=nota_real, velocity=context.current_volume, time=0))
+        messages.append(mido.Message('note_on', note=nota_real, velocity=context.current_volume, time=context.pending_pause_ticks))
+        context.zero_pending_time()
         messages.append(mido.Message('note_off', note=nota_real, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
         context.last_played_note = nota_real
 
     def _handle_pause(self, context: MidiContext, valor: int, messages: list):
-        if messages:
-            messages[-1].time += valor
+        context.pending_pause_ticks += DEFAULT_TICKS_DURATION
 
     def _handle_set_instrument(self, context: MidiContext, valor: int, messages: list):
         context.set_instrument(valor)

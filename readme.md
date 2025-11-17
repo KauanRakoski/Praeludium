@@ -15,3 +15,14 @@ python main.py
 ```
 
 This will open the flet application frontend
+
+
+### Building the app
+
+The app can be build using
+```
+pip install pyinstaller
+flet pack main.py --name Praeludium --hidden-import mido.backends.portmidi --hidden-import pygame._view
+```
+
+Needs more testing.
