@@ -6,3 +6,6 @@ pages/__pycache__
 teste*
 output.mid
 *.pyc
+build/
+dist/
+Praeludium.spec

@@ -38,7 +38,7 @@ class FileHandler():
                  
         return arquivo_mid
     
-    def salvarArquivoMidi(self, midi_messages):
+    def saveMidiFile(self, midi_messages):
         arquivo = self._setupMidiFile(midi_messages)
         
         arquivo.save(OUTPUT_FILE_NAME)

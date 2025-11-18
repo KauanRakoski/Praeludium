@@ -1,9 +1,9 @@
 import flet as ft
 from conversor.conversor import Conversor, default_rules, MidiContext
 
-OITAVA_PADRAO = 4
-VOLUME_PADRAO = 64
-BPM_PADRAO = 120
+DEFAULT_OCTAVE = 4
+DEFAULT_VOLUME = 64
+DEFAULT_BPM = 120
 
 class StateManager():
     
@@ -20,9 +20,9 @@ class StateManager():
         self.file_service = None
         self.sound_service = None
         
-        self.initial_octave = OITAVA_PADRAO
-        self.initial_volume = VOLUME_PADRAO
-        self.initial_bpm = BPM_PADRAO
+        self.initial_octave = DEFAULT_OCTAVE
+        self.initial_volume = DEFAULT_VOLUME
+        self.initial_bpm = DEFAULT_BPM
     
     def set_initial_octave(self, value: int):
         self.initial_octave = int(value)
@@ -51,6 +51,9 @@ class StateManager():
     def setMidiMessages(self, messages):
         self.midi_messages = messages
 
+
+    def set_default_rules(self, rules):
+        self.rules = rules
   
     def process_text_to_music(self, texto):
         if not self.conversor_service or not self.file_service:
@@ -63,9 +66,9 @@ class StateManager():
             initial_bpm=self.initial_bpm
         )
 
-        music_events = self.conversor_service.converter_texto(texto, contexto_da_musica)
+        music_events = self.conversor_service.convert_text(texto, contexto_da_musica)
         
-        self.file_service.salvarArquivoMidi(music_events)
+        self.file_service.saveMidiFile(music_events)
         
         self.setText(texto)
         self.setMidiMessages(music_events)
