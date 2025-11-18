@@ -45,6 +45,9 @@ class MidiContext:
     def set_instrument(self, valor):
         self.current_instrument = valor % (MAX_MIDI_PROGRAM + 1)
         
+    def get_instrument(self):
+        return self.current_instrument
+        
     def set_instrument_tubular_bells(self):
         self.current_instrument = 15
     
@@ -147,7 +150,7 @@ class Conversor():
 
     def _handle_repeat_or_pause(self, context: MidiContext, messages: list):
         if context.last_played_note is not None:
-            messages.append(mido.Message('note_on', note=context.last_played_note, velocity=context.current_volume, time=0))
+            messages.append(mido.Message('note_on', note=context.last_played_note, velocity=context.current_volume, time=context.pending_pause_ticks))
             messages.append(mido.Message('note_off', note=context.last_played_note, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
         else:
             if messages:
@@ -160,7 +163,7 @@ class Conversor():
 
         nota_real = valor_midi + ((context.current_octave - 4) * 12)
 
-        messages.append(mido.Message('note_on', note=nota_real, velocity=context.current_volume, time=0))
+        messages.append(mido.Message('note_on', note=nota_real, velocity=context.current_volume, time=context.pending_pause_ticks))
         messages.append(mido.Message('note_off', note=nota_real, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
 
         context.last_played_note = nota_real
@@ -168,17 +171,18 @@ class Conversor():
     def _handle_special_vowel(self, context: MidiContext, valor, messages: list):
         
         if context.last_character in NOTE_CHARACTERS:
-            messages.append(mido.Message('note_on', note=context.last_played_note, velocity=context.current_volume, time=0))
+            messages.append(mido.Message('note_on', note=context.last_played_note, velocity=context.current_volume, time=context.pending_pause_ticks))
             messages.append(mido.Message('note_off', note=context.last_played_note, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
         else:
+            previous_instrument = context.get_instrument()
             context.set_instrument(TELEPHONE_RING)
-            messages.append(mido.Message('program_change', program=context.current_instrument, time=0))
+            messages.append(mido.Message('program_change', program=context.current_instrument, time=context.pending_pause_ticks))
 
-            messages.append(mido.Message('note_on', note=60, velocity=context.current_volume, time=0))
+            messages.append(mido.Message('note_on', note=60, velocity=context.current_volume, time=context.pending_pause_ticks))
             messages.append(mido.Message('note_off', note=60, velocity=context.current_volume, time=DEFAULT_TICKS_DURATION))
 
-            context.set_instrument(PIANO)
-            messages.append(mido.Message('program_change', program=context.current_instrument, time=0))
+            context.set_instrument(previous_instrument)
+            messages.append(mido.Message('program_change', program=context.current_instrument, time=context.pending_pause_ticks))
     
     def _handle_instrument_by_previous(self, context: MidiContext, valor, messages: list):
         """
